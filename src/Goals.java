@@ -1,7 +1,9 @@
+import java.util.Date;
+
 public class Goals implements Objectives { /* TODO: make get methods return immutable objects */
     private String title;
     private String description;
-    private int month, day, year;
+    private Date date;
     private boolean completed;
     @Override
     public String getTtitle() { return title; }
@@ -16,15 +18,15 @@ public class Goals implements Objectives { /* TODO: make get methods return immu
     public void setDescrioption(String newDescription) { description = newDescription; }
 
     @Override
-    public int getDate() {
-        return month, day, year; // what is issue?
+    public Date getDate() {
+        return date; // what is issue?
     }
 
     @Override
     public void setDate(int newMonth, int newDay, int newYear) {
-       this.month = newMonth;
-       this.day = newDay;
-       this.year = newYear;
+      date.setMonth(newMonth);
+      date.setDate(newDay);
+      date.setYear(newYear);
     }
 
     @Override
