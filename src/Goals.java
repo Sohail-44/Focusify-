@@ -19,9 +19,10 @@ public class Goals implements Objectives { /* TODO: make get methods return immu
 
     @Override
     public Date getDate() {
-        return date; // what is issue?
+        return date; 
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setDate(int newMonth, int newDay, int newYear) {
       date.setMonth(newMonth);
