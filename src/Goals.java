@@ -1,11 +1,10 @@
 
 import java.time.LocalTime;
 
-public class Goals { /* TODO: make get methods return immutable objects */
+public class Goals { 
     private String title;
     private String description;
-    private LocalTime time = LocalTime.now().plusHours(1);
-    int compared = LocalTime.now().compareTo(time);
+    private LocalTime time;
     private boolean completed;
     
     public String getTtitle() { return title; }
@@ -33,6 +32,7 @@ public class Goals { /* TODO: make get methods return immutable objects */
     
     
     public boolean isSoon() {
+        if ()
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'isSoon'");
     }
