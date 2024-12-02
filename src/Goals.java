@@ -20,6 +20,8 @@ public class Goals {
     public void setDescrioption(String newDescription) { this.description = newDescription; }
 
     
+     /* Time  Methods */
+    
     public LocalTime getTime() { return time; }
     
     public void setTime(int hour, int minute) {
@@ -53,13 +55,18 @@ public class Goals {
         else{ return false; }
     }
     
+    /* Completed Methods */
 
     public boolean isCompleted() { return completed; }
 
     public void setCompleted(boolean newStatus) { this.completed = newStatus; }
 
     
+    /* Step Methods */
+
     public void addStep(String newStep){ steps.add(newStep); }
+
+    public void removeStep(int stepNum){ steps.remove(stepNum - 1); }
 
     public ArrayList<String> getSteps(){ return steps; }
 
