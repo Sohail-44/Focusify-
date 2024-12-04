@@ -27,8 +27,7 @@ public class TaskManager {
         List<String> highPriorityA = goalManager.HighPriorityA("A1", "A2");
         List<String> highPriorityB = goalManager.HighPriorityB("B1", "B2");
         List<String> niceToDoGoals = goalManager.NiceToDo("C1", "C2");
-        List<String> delegateGoals = goalManager.Delegate("D1", "D2");
-        List<String> eliminateGoals = goalManager.Eliminate("E1", "E2");
+ 
 
         // Display goals, excluding eliminate goals
         System.out.println("Top 10 Goals:");
@@ -42,12 +41,6 @@ public class TaskManager {
 
         System.out.println("\nNice to Do Goals:");
         niceToDoGoals.forEach(System.out::println);
-
-        System.out.println("\nGoals to Delegate:");
-        delegateGoals.forEach(System.out::println);
-
-        System.out.println("\nEliminate Goals (These are not actionable):");
-        eliminateGoals.forEach(System.out::println);
     }
 
     private Map<String, List<String>> collectTasks(JFrame frame) {
@@ -59,7 +52,7 @@ public class TaskManager {
         allGoals.addAll(goalManager.HighPriorityA("A1", "A2"));
         allGoals.addAll(goalManager.HighPriorityB("B1", "B2"));
         allGoals.addAll(goalManager.NiceToDo("C1", "C2"));
-        allGoals.addAll(goalManager.Delegate("D1", "D2"));
+     
 
         // Loop through all goals and ask user for tasks
         for (String goal : allGoals) {
