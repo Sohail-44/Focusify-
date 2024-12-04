@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -10,139 +9,150 @@ public class UserInteraction {
     private String leastProductiveTime;
 
     public static void userinteraction(JFrame frame) {
-        // Frame
         frame.getContentPane().setBackground(new Color(255, 253, 208));
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(255, 230, 208));
+        JPanel mainPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+        mainPanel.setBackground(new Color(255, 230, 208));
 
-        // label
-        JLabel instructionLabel = new JLabel("Enter your top 6 goals for tomorrow:");
-        instructionLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.setBackground(new Color(255, 230, 208));
+
+        JLabel instructionLabel = new JLabel("Enter your top 6 goals and tasks:");
+        instructionLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
         instructionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         instructionLabel.setForeground(new Color(102, 0, 153));
-        panel.add(instructionLabel);
-        panel.add(Box.createRigidArea(new Dimension(0, 30)));
+        leftPanel.add(instructionLabel);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        // JTextField
+        JPanel goalTaskPanel = new JPanel(new GridLayout(6, 4, 10, 10));
+        goalTaskPanel.setBackground(new Color(255, 230, 208));
         JTextField[] goalFields = new JTextField[6];
+        JTextField[][] taskFields = new JTextField[6][2];
+        JComboBox<String>[] priorityCombos = new JComboBox[6];
+        JComboBox<String>[][] durationCombos = new JComboBox[6][2];
+
+        String[] priorities = {"Highest Priority", "High Priority", "Nice to Do"};
+        String[] durations = {"15 mins", "30 mins", "45 mins", "60 mins", "75 mins", "90 mins", "105 mins", "120 mins"};
+
         for (int i = 0; i < 6; i++) {
-            JTextField goalField = new JTextField();
-            goalField.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-            goalField.setBackground(new Color(255, 255, 255));
-            goalField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(255, 102, 0)),
-                BorderFactory.createEmptyBorder(5, 10, 5, 10)
-            ));
-            goalField.setPreferredSize(new Dimension(400, 40));
-            goalField.setMaximumSize(goalField.getPreferredSize());
-            panel.add(createGoalLabel("Goal " + (i + 1)));
-            panel.add(goalField);
-            goalFields[i] = goalField;
-            panel.add(Box.createRigidArea(new Dimension(0, 20)));
+            JLabel goalLabel = new JLabel("Goal " + (i + 1) + ":");
+            goalLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            goalTaskPanel.add(goalLabel);
+
+            goalFields[i] = createStyledTextField(250, 30);
+            goalTaskPanel.add(goalFields[i]);
+
+            priorityCombos[i] = new JComboBox<>(priorities);
+            priorityCombos[i].setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            goalTaskPanel.add(priorityCombos[i]);
+
+            JPanel tasksPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+            for (int j = 0; j < 2; j++) {
+                taskFields[i][j] = createStyledTextField(120, 35);
+                tasksPanel.add(taskFields[i][j]);
+
+                durationCombos[i][j] = new JComboBox<>(durations);
+                durationCombos[i][j].setFont(new Font("Segoe UI", Font.PLAIN, 14));
+                tasksPanel.add(durationCombos[i][j]);
+            }
+            goalTaskPanel.add(tasksPanel);
+        }
+        leftPanel.add(goalTaskPanel);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBackground(new Color(255, 230, 208));
+
+        JLabel productiveTimeLabel = new JLabel("Productive Times:");
+        productiveTimeLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        productiveTimeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        rightPanel.add(productiveTimeLabel);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        String[] timeLabels = {"Most Productive Time:", "Medium Productive Time:", "Least Productive Time:"};
+        JTextField[] timeFields = new JTextField[3];
+
+        for (int i = 0; i < 3; i++) {
+            JLabel label = new JLabel(timeLabels[i]);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+            rightPanel.add(label);
+            timeFields[i] = createStyledTextField(150, 25);
+            timeFields[i].setAlignmentX(Component.CENTER_ALIGNMENT);
+            rightPanel.add(timeFields[i]);
+            rightPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         }
 
-        // Submit Button
-        JButton submitButton = createStyledButton("Submit Goals");
-        submitButton.setBackground(new Color(255, 02, 102));
-        submitButton.setForeground(new Color(255, 02, 102));
+        JButton submitButton = createStyledButton("Submit");
+        submitButton.setForeground(new Color(255, 153, 0));
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.addActionListener(e -> {
-            List<String> sixGoals = List.of(
-                goalFields[0].getText(), goalFields[1].getText(), goalFields[2].getText(),
-                goalFields[3].getText(), goalFields[4].getText(), goalFields[5].getText()
-            );
+            UserInteraction ui = new UserInteraction();
+            ui.mostProductiveTime = timeFields[0].getText();
+            ui.mediumProductiveTime = timeFields[1].getText();
+            ui.leastProductiveTime = timeFields[2].getText();
 
-            JPanel priorityPanel = new JPanel();
-            priorityPanel.setLayout(new BoxLayout(priorityPanel, BoxLayout.Y_AXIS));
-            priorityPanel.setBackground(new Color(255, 230, 208));
-
-            JLabel priorityLabel = new JLabel("Select priorities for your goals:");
-            priorityLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-            priorityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            priorityLabel.setForeground(new Color(102, 0, 153));
-            priorityPanel.add(priorityLabel);
-            priorityPanel.add(Box.createRigidArea(new Dimension(0, 30)));
-
-            String[] priorities = {"High Priority A", "High Priority B", "Nice to Do"};
-            JComboBox<String>[] priorityCombos = new JComboBox[6];
+            Map<String, Map<String, Integer>> taskDetails = new HashMap<>();
             for (int i = 0; i < 6; i++) {
-                priorityCombos[i] = new JComboBox<>(priorities);
-                priorityCombos[i].setFont(new Font("Segoe UI", Font.PLAIN, 16));
-                priorityCombos[i].setPreferredSize(new Dimension(400, 40));
-                priorityCombos[i].setMaximumSize(priorityCombos[i].getPreferredSize());
-                priorityPanel.add(createGoalLabel("Priority for: " + sixGoals.get(i)));
-                priorityPanel.add(priorityCombos[i]);
-                priorityPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+                String goal = goalFields[i].getText();
+                String priority = (String) priorityCombos[i].getSelectedItem();
+                if (!goal.isEmpty()) {
+                    Map<String, Integer> taskTime = new HashMap<>();
+                    for (int j = 0; j < 2; j++) {
+                        String task = taskFields[i][j].getText();
+                        if (!task.isEmpty()) {
+                            String duration = (String) durationCombos[i][j].getSelectedItem();
+                            int minutes = Integer.parseInt(duration.split(" ")[0]);
+                            taskTime.put(task, minutes);
+                        }
+                    }
+                    if (!taskTime.isEmpty()) {
+                        taskDetails.put(goal + " (" + priority + ")", taskTime);
+                    }
+                }
             }
 
-            JButton taskButton = createStyledButton("Add Tasks");
-            taskButton.addActionListener(e2 -> {
-                UserInteraction ui = new UserInteraction();
-                ui.mostProductiveTime = customInputDialog(frame, "Enter your most productive time (e.g., 9:00 AM - 11:00 AM):");
-                ui.mediumProductiveTime = customInputDialog(frame, "Enter your medium productive time (e.g., 1:00 PM - 3:00 PM):");
-                ui.leastProductiveTime = customInputDialog(frame, "Enter your least productive time (e.g., 4:00 PM - 6:00 PM):");
-                Map<String, Map<String, Integer>> taskDetails = ui.collectTasksWithTime(frame, sixGoals, priorityCombos);
-                ui.displaySchedule(frame, taskDetails);
-            });
-
-            priorityPanel.add(taskButton);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(priorityPanel);
-            frame.revalidate();
-            frame.repaint();
+            ui.displaySchedule(frame, taskDetails);
         });
 
-        panel.add(submitButton);
+        rightPanel.add(Box.createVerticalGlue());
+        rightPanel.add(submitButton);
+        rightPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
+
         frame.getContentPane().removeAll();
-        frame.getContentPane().add(panel);
+        frame.getContentPane().add(mainPanel);
         frame.revalidate();
         frame.repaint();
     }
 
-    private Map<String, Map<String, Integer>> collectTasksWithTime(JFrame frame, List<String> goals, JComboBox<String>[] priorityCombos) {
-        Map<String, Map<String, Integer>> taskDetails = new HashMap<>();
-        for (int i = 0; i < goals.size(); i++) {
-            String goal = goals.get(i);
-            String priority = (String) priorityCombos[i].getSelectedItem();
-            Map<String, Integer> taskTimes = new HashMap<>();
-            
-            for (int j = 0; j < 2; j++) {
-                String taskInput = customInputDialog(frame, "Enter task " + (j + 1) + " for the goal: " + goal);
-                if (taskInput != null && !taskInput.isEmpty()) {
-                    String timeInput = customInputDialog(frame, "Enter time estimate (in minutes) for task: " + taskInput);
-                    int taskTime = 0;
-                    try {
-                        taskTime = Integer.parseInt(timeInput);
-                    } catch (NumberFormatException e) {
-                        JOptionPane.showMessageDialog(frame, "Invalid time input. Setting to default (0 minutes).");
-                    }
-                    taskTimes.put(taskInput, taskTime);
-                }
-            }
-            
-            if (!taskTimes.isEmpty()) {
-                taskDetails.put(goal + " (" + priority + ")", taskTimes);
-            }
-        }
-        return taskDetails;
-    }
-
-    private void displaySchedule(JFrame frame, Map<String, Map<String, Integer>> taskDetails) {
+    public JButton displaySchedule(JFrame frame, Map<String, Map<String, Integer>> taskDetails) {
         StringBuilder schedule = new StringBuilder("<html><body style='width: 300px'>");
-        schedule.append("<h2 style='color: #333333;'>Your Schedule:</h2>");
-        
+        schedule.append("<h2 style='color: #333333;'>My Tommorrow's schedule:</h2>");
         schedule.append("<h3 style='color: #4CAF50;'>Most Productive Time: ").append(mostProductiveTime).append("</h3>");
-        appendTasksToSchedule(schedule, taskDetails, "High Priority A");
-        
+        appendTasksToSchedule(schedule, taskDetails, "Highest Priority");
         schedule.append("<h3 style='color: #FFA500;'>Medium Productive Time: ").append(mediumProductiveTime).append("</h3>");
-        appendTasksToSchedule(schedule, taskDetails, "High Priority B");
-        
+        appendTasksToSchedule(schedule, taskDetails, "High Priority");
         schedule.append("<h3 style='color: #3F51B5;'>Least Productive Time: ").append(leastProductiveTime).append("</h3>");
         appendTasksToSchedule(schedule, taskDetails, "Nice to Do");
-        
         schedule.append("</body></html>");
+    
+        JPanel schedulePanel = new JPanel();
+        schedulePanel.setLayout(new BoxLayout(schedulePanel, BoxLayout.Y_AXIS));
         
-        JOptionPane.showMessageDialog(frame, new JLabel(schedule.toString()), "Your Schedule", JOptionPane.PLAIN_MESSAGE);
+        JLabel scheduleLabel = new JLabel(schedule.toString());
+        schedulePanel.add(scheduleLabel);
+    
+        JButton startWorkingButton = createStyledButton("Let's Start Working");
+        startWorkingButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    
+        schedulePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        schedulePanel.add(startWorkingButton);
+    
+        JOptionPane.showMessageDialog(frame, schedulePanel, "My Personalized Schedule", JOptionPane.PLAIN_MESSAGE);
+    
+        return startWorkingButton;
     }
 
     private void appendTasksToSchedule(StringBuilder schedule, Map<String, Map<String, Integer>> taskDetails, String priority) {
@@ -156,21 +166,23 @@ public class UserInteraction {
         });
     }
 
-    public static String customInputDialog(JFrame frame, String message) {
-        return JOptionPane.showInputDialog(frame, message);
-    }
-
-    private static JLabel createGoalLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        label.setForeground(new Color(100, 100, 100));
-        return label;
+    private static JTextField createStyledTextField(int width, int height) {
+        JTextField field = new JTextField();
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        field.setBackground(new Color(255, 255, 255));
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(255, 102, 0)),
+            BorderFactory.createEmptyBorder(2, 5, 2, 5)
+        ));
+        field.setPreferredSize(new Dimension(width, height));
+        field.setMaximumSize(field.getPreferredSize());
+        return field;
     }
 
     private static JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.ORANGE);
         button.setBackground(new Color(0, 123, 255));
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setFocusPainted(false);
