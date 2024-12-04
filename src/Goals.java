@@ -45,15 +45,15 @@ public class Goals {
     }
     
 
-    public boolean isSoon() {
-       return time.getHour() < LocalTime.now().plusHours(10).getHour();
-    }
-    public boolean inGoalTime(int timeRange){
-        if(LocalTime.now().getHour() >= time.getHour() && LocalTime.now().getHour() < (time.getHour() + timeRange)){
-            return true;
-        }
-        else{ return false; }
-    }
+    // public boolean isSoon() {
+    //    return time.getHour() < LocalTime.now().plusHours(10).getHour();
+    // }
+    // public boolean inGoalTime(int timeRange){
+    //     if(LocalTime.now().getHour() >= time.getHour() && LocalTime.now().getHour() < (time.getHour() + timeRange)){
+    //         return true;
+    //     }
+    //     else{ return false; }
+    // }
     
     /* Completed Methods */
 
