@@ -34,7 +34,7 @@ public class UserInteraction {
         String[] priorities = {"Highest Priority", "High Priority", "Nice to Do"};
         String[] durations = {"15 mins", "30 mins", "45 mins", "60 mins", "75 mins", "90 mins", "105 mins", "120 mins"};
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) {     
             JLabel goalLabel = new JLabel("Goal " + (i + 1) + ":");
             goalLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
             goalTaskPanel.add(goalLabel);
@@ -55,7 +55,7 @@ public class UserInteraction {
                 durationCombos[i][j].setFont(new Font("Segoe UI", Font.PLAIN, 14));
                 tasksPanel.add(durationCombos[i][j]);
             }
-            goalTaskPanel.add(tasksPanel);
+            goalTaskPanel.add(tasksPanel);  
         }
         leftPanel.add(goalTaskPanel);
 
