@@ -50,13 +50,13 @@ public class PomodoroTimer extends JFrame {
         });
         add(startButton);
         //TODO: inmplement reset and break button
-        resetButton = new JButton("reset");
+        resetButton = new JButton("Reset");
         resetButton.addActionListener((ActionListener) new ActionListener(){
             public void actionPerformed(ActionEvent e){
                stopTimer();
             }
         });
-        
+        add(resetButton);
     }
 
     private void startTimer() {
@@ -106,10 +106,14 @@ public class PomodoroTimer extends JFrame {
 
     private void stopTimer() {
         timer.cancel();
+        startButton.setText("Start");
         paused = true;
         timeLeft = 25 * 60;
         timeLabel.setText(String.format("%02d:%02d", timeLeft / 60, timeLeft % 60));
+        timer = new Timer();
     }
+
+
     public static void main(String[] args) {
 
         SwingUtilities.invokeLater(() -> {
