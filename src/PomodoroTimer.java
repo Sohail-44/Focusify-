@@ -22,6 +22,10 @@ public class PomodoroTimer extends JFrame {
     private Timer timer;
     private boolean paused;
     private int timeLeft = 25 * 60; // 25 minutes in seconds counting 
+    private int breakTimeLeft = 5 * 60; // 5 minute break
+    private Timer breakTimer;
+    private JButton breakStartButton;
+    private JButton breakResetButton;
 
     public PomodoroTimer() {
         setTitle("Pomodoro");
@@ -42,6 +46,7 @@ public class PomodoroTimer extends JFrame {
                 if (paused == true) {
                     startTimer();
                     startButton.setText("Pause");
+                    resetButton.setVisible(true);
                 } else {
                     pauseTimer();
                     startButton.setText("Start");
@@ -57,7 +62,9 @@ public class PomodoroTimer extends JFrame {
             }
         });
         add(resetButton);
+        resetButton.setVisible(false);
     }
+
 
     private void startTimer() {
         paused = false;
@@ -76,7 +83,7 @@ public class PomodoroTimer extends JFrame {
                 stopTimer();
                 JOptionPane.showMessageDialog(PomodoroTimer.this, "Time's up!");
             }
-            beginningDelay = 0; //after unpaused, only delayed the first timer
+            beginningDelay = 0; //after unpaused, only delayed the first time
             }
             
         }, beginningDelay, 1000);
@@ -111,6 +118,7 @@ public class PomodoroTimer extends JFrame {
         timeLeft = 25 * 60;
         timeLabel.setText(String.format("%02d:%02d", timeLeft / 60, timeLeft % 60));
         timer = new Timer();
+        resetButton.setVisible(false);
     }
 
 
