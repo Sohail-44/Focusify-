@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import java.lang.Math;
 
@@ -25,13 +26,16 @@ public class PomodoroTimer extends JFrame {
     private int breakTimeLeft = 5 * 60; // 5 minute break
     private Timer breakTimer;
     private JButton breakStartButton;
-    private JButton breakResetButton;
+    private boolean breakPaused;
+    private JLabel breakTimeLabel;
+    private JLabel breakTimerLabel;
 
     public PomodoroTimer() {
         setTitle("Pomodoro");
         setSize(300, 150); // Just a small one to check
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
+        
 
         timeLabel = new JLabel(String.format("%02d:%02d", timeLeft / 60, timeLeft % 60));
         timeLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -39,7 +43,7 @@ public class PomodoroTimer extends JFrame {
 
         timer = new Timer();
         paused = true; // timer starts out technically paused
-
+        
         startButton = new JButton("Start");
         startButton.addActionListener((ActionListener) new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -63,14 +67,43 @@ public class PomodoroTimer extends JFrame {
         });
         add(resetButton);
         resetButton.setVisible(false);
+        
+
+        
+        breakTimerLabel = new JLabel("Break Time:");
+        breakTimerLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        
+
+        breakTimer = new Timer();
+        breakTimeLabel = new JLabel();
+        breakTimeLabel = new JLabel(String.format("%02d:%02d", breakTimeLeft / 60, breakTimeLeft % 60));
+        breakTimeLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        breakStartButton = new JButton("Start");
+        JPanel breakPannel = new JPanel();
+        breakPannel.setAlignmentY(BOTTOM_ALIGNMENT);
+        breakPaused = true;
+        breakStartButton.addActionListener((ActionListener) new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (breakPaused == true){
+                    startBreakTimer();
+                    breakPaused = false;
+                    breakStartButton.setText("Reset");
+                    
+                } else{
+                    stopBreakTimer();
+                }
+            } });
+        add(breakTimerLabel);
+        add(breakTimeLabel);
+        add(breakStartButton);
+
     }
 
-
+    /* Pomodoro Timer */
     private void startTimer() {
         paused = false;
         startTimeMili = System.currentTimeMillis();
         timer.scheduleAtFixedRate(new TimerTask() {   
-            
             public void run() {
                 setRemainingPeriod(1000);
                 setPeriodStart();
@@ -93,8 +126,6 @@ public class PomodoroTimer extends JFrame {
         startTimeMili = System.currentTimeMillis();
     }
     private void setDifference(){
-        System.out.println(startTimeMili);
-        System.out.println(System.currentTimeMillis());
         difference = startTimeMili - System.currentTimeMillis();
     }
     public void setRemainingPeriod(long num) {
@@ -106,7 +137,6 @@ public class PomodoroTimer extends JFrame {
         setDifference();
         remainingPeriod = remainingPeriod + difference;
         beginningDelay = Math.abs(remainingPeriod); // finds ammount of time in the 1000 milliseconds since task is delayed, abs() is done to prevent negatives
-        System.out.println(beginningDelay);
         paused = true;
         timer = new Timer(); // creates new timer to task
     }
@@ -121,6 +151,34 @@ public class PomodoroTimer extends JFrame {
         resetButton.setVisible(false);
     }
 
+    /* Break Timer */
+
+    private void startBreakTimer(){
+        breakTimer.scheduleAtFixedRate(new TimerTask() {   
+            
+            public void run() {
+                if (breakTimeLeft > 0) {
+                breakTimeLeft--;
+                SwingUtilities.invokeLater(() -> {
+                    breakTimeLabel.setText(String.format("%02d:%02d", breakTimeLeft / 60, breakTimeLeft % 60));
+                });
+            } else {
+                breakTimer.cancel();
+                JOptionPane.showMessageDialog(PomodoroTimer.this, "Break Time's up!");
+            }
+            }
+            
+        }, 0, 1000);
+    }
+
+    private void stopBreakTimer(){
+        breakTimer.cancel();
+        breakPaused = true;
+        breakTimeLeft = 5 * 60;
+        breakTimeLabel.setText(String.format("%02d:%02d", breakTimeLeft / 60, breakTimeLeft % 60));
+        breakTimer = new Timer();
+        breakStartButton.setText("Start");
+    }
 
     public static void main(String[] args) {
 
