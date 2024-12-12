@@ -35,6 +35,7 @@ public class PomodoroTimer extends JFrame {
         setSize(300, 150); // Just a small one to check
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new FlowLayout());
+        setResizable(false);
         
 
         timeLabel = new JLabel(String.format("%02d:%02d", timeLeft / 60, timeLeft % 60));
