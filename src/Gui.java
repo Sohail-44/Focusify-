@@ -47,7 +47,7 @@ public class Gui {
 
         // Resizing the image
         Image image = BrianTracy.getImage();
-        Image scaledImage = image.getScaledInstance(600, 400, Image.SCALE_SMOOTH);
+        Image scaledImage = image.getScaledInstance(1200, 800, Image.SCALE_SMOOTH);
         ImageIcon resizedImage = new ImageIcon(scaledImage);
 
         // Adding the image below the subtext (Centered)
