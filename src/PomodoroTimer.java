@@ -22,7 +22,7 @@ public class PomodoroTimer extends JFrame {
     private long remainingPeriod;
     private Timer timer;
     private boolean paused;
-    private int timeLeft = 25 * 60; // 25 minutes in seconds counting 
+    private int timeLeft = 20; // 25 minutes in seconds counting 
     private int breakTimeLeft = 5 * 60; // 5 minute break
     private Timer breakTimer;
     private JButton breakStartButton;
@@ -115,6 +115,7 @@ public class PomodoroTimer extends JFrame {
                 });
             } else {
                 stopTimer();
+                startBreakTimer();
                 JOptionPane.showMessageDialog(PomodoroTimer.this, "Time's up!");
             }
             beginningDelay = 0; //after unpaused, only delayed the first time
