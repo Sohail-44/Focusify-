@@ -108,5 +108,3 @@ public class Gui {
     }
 }
 
-// Feedback from Professor:
-// Next and go back button
